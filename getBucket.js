@@ -17,10 +17,11 @@ const experiments = {
   ],
 };
 
-const getBucket = (session, experimentName) => {
+const getBucket = (session, experimentName, db) => {
   const hash = stringHash(`${session}${experimentName}`) % 100;
   debugger;
-  const experiment = experiments[experimentName];
+  const experiment = db.collection('experiments').find({ name: experimentName });
+  //   const experiment = experiments[experimentName];
   let placeholder = 0;
   const bucketsWithRange = experiment.map((bucket) => {
     const bucketWithRange = {
