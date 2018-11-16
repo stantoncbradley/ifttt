@@ -1,29 +1,10 @@
 const stringHash = require('string-hash');
 
-const experiments = {
-  buttonColor: [
-    {
-      name: 'control',
-      size: 50,
-    },
-    {
-      name: 'red',
-      size: 25,
-    },
-    {
-      name: 'blue',
-      size: 25,
-    },
-  ],
-};
-
-const getBucket = (session, experimentName, db) => {
+const getBucket = async (session, experimentName, db) => {
   const hash = stringHash(`${session}${experimentName}`) % 100;
-  debugger;
-  const experiment = db.collection('experiments').find({ name: experimentName });
-  //   const experiment = experiments[experimentName];
+  const experiment = await db.collection('experiments').findOne({ name: experimentName });
   let placeholder = 0;
-  const bucketsWithRange = experiment.map((bucket) => {
+  const bucketsWithRange = experiment.data.map((bucket) => {
     const bucketWithRange = {
       name: bucket.name,
       startIndex: placeholder,

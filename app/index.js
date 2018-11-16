@@ -8,28 +8,7 @@ let db;
 
 MongoClient.connect('mongodb://localhost:27017/experiments', (err, client) => {
 //   if (err) throw err;
-
   db = client.db('experiments');
-
-//   db.collection('experiments').insertMany([
-//     {
-//       name: 'buttonColor',
-//       data: [
-//         {
-//           name: 'control',
-//           size: 50,
-//         },
-//         {
-//           name: 'red',
-//           size: 25,
-//         },
-//         {
-//           name: 'blue',
-//           size: 25,
-//         },
-//       ],
-//     },
-//   ]);
 });
 
 
@@ -47,11 +26,10 @@ app.get('/', (req, res) => {
   res.send(`Hello World! session id is ${req.session.id}`);
 });
 
-app.get('/experiments/:name', (req, res) => {
+app.get('/experiments/:name', async (req, res) => {
   const experimentName = req.params.name;
   const session = req.session.id;
-  const bucket = getBucket(session, experimentName, db);
-  //   debugger;
+  const bucket = await getBucket(session, experimentName, db);
   res.send(`bucket is ${bucket} for experiment ${experimentName} and session ${session}`);
 });
 
